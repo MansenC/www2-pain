@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Aufgabe 2.3</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        window.onclick = function(e) {
+            $('#movable-div').css({
+                left: `${e.pageX}px`,
+                top: `${e.pageY}px`,
+            });
+        };
+    </script>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+    
+        #movable-div {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            background: rgba(0, 0, 0, 0.31);
+            text-align: center;
+            display: table;
+        }
+        
+        #movable-div span {
+            vertical-align: middle;
+            display: table-cell;
+        }
+    </style>
+</head>
+<body>
+    <div id="movable-div">
+        <span>Bewege mich durchs Clicken!</span>
+    </div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Aufgabe 2.1</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        window.onclick = function(e) {
+            $('#click-list').append(`<li>PageX: ${e.pageX}; PageY: ${e.pageY}; ClientX: ${e.clientX}; ClientY: ${e.clientY}</li>`);
+        };
+    </script>
+</head>
+<body>
+    <h1>Eine Liste aller Clicks:</h1>
+    <ul id="click-list"></ul>
+</body>
+</html>
