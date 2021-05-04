@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Aufgabe 3.2</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#action').click(function() {
+                $('#list').append('<li>' + $('#input').val() + '</li>');
+            });
+        });
+    </script>
+</head>
+<body>
+    <input id="input" type="text">
+    <button id="action">Submit</button>
+    <ul id="list"></ul>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Aufgabe 3.3</title>
+    <script>
+        for (let index = 1; index <= 100; index++) {
+            let allDivisors = '';
+            for (let divisor = 2; divisor < index; divisor++) {
+                if (index % divisor === 0) {
+                    allDivisors += divisor + ', ';
+                }
+            }
+
+            console.log(index + ': ' + allDivisors);
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Aufgabe 3.1</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#action').click(function() {
+                const firstValue = $('#firstText').val();
+                $('#firstText').val($('#secondText').val());
+                $('#secondText').val(firstValue);
+            });
+        });
+    </script>
+</head>
+<body>
+    <input id="firstText" type="text">
+    <input id="secondText" type="text">
+    <button id="action">Swap</button>
+</body>
+</html>
