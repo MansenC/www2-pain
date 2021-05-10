@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Aufgabe</title>
+    <style>
+        #interestDisplay, tr { color: rgba(0, 0, 0, .89); border: 1px solid rgba(0, 0, 0, .89); border-collapse: collapse; font-weight: bold; }
+        #interestDisplay { margin-top: 4px; min-width: 256px; }
+        #interestDisplay td { text-align: center; vertical-align: middle; background: rgba(0, 0, 0, .11); }
+        #interestDisplay > tr:nth-child(odd) { background: rgba(0, 0, 0, .3); }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        const kapital = function(k, p) {
+            return k * (1 + p / 100);
+        };
+
+        const zins = function(k, p) {
+            return k * p / 100;
+        };
+
+        $(document).ready(function() {
+            $('#submit').click(function() {
+                const interestDisplay = $('#interestDisplay');
+                interestDisplay.empty();
+
+                let lastCapital = $('#capital').val();
+                let interest = $('#interest').val();
+
+                for (let year = 1; year <= $('#time').val(); year++) {
+                    let currentInterest = zins(lastCapital, interest);
+                    lastCapital = kapital(lastCapital, interest);
+                    interestDisplay.append(`<tr><td>${year}</td><td>${currentInterest}</td><td>${lastCapital}</td></tr>`);
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <div>
+        <input id="capital" type="number" placeholder="Kapital">
+        <input id="interest" type="number" placeholder="Zinssatz in %">
+        <input id="time" type="number" placeholder="Laufzeit in Jahren">
+        <button id="submit">Berechne</button>
+    </div>
+    <table id="interestDisplay"></table>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Aufgabe 4.1</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        const printRealDivisors = function(up) {
+            for (let index = 1; index <= up; index++) {
+                let allDivisors = '';
+                for (let divisor = 2; divisor < index; divisor++) {
+                    if (index % divisor === 0) {
+                        allDivisors += divisor + ', ';
+                    }
+                }
+
+                console.log(index + ': ' + allDivisors);
+            }
+        };
+
+        $(document).ready(function() {
+            $('#submit').click(function() {
+                const upperLimit = $('#up').val();
+                printRealDivisors(upperLimit);
+            });
+        });
+    </script>
+</head>
+<body>
+    <input id="up" type="number">
+    <button id="submit">Submit</button>
+</body>
+</html>
