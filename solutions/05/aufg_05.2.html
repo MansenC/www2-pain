@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head><title>bsp17.html</title>
+        <meta charset="UTF-8">
+        <style>
+        #bild {
+            border: 1px solid black;
+            border-radius: 5px;
+        }
+        </style>
+    </head>
+    <body>
+    <h1>Das canvas-Element</h1>
+    <h1>Zeichnen mit dem Canvas-Element</h1>
+    <canvas id="bild" width="500" height="400"></canvas>
+    <script>
+        // JavaScript-Zugriff auf das canvas-Element mit id=bild
+        // Entspricht $('#bild') von jQuery
+        var canvas = document.getElementById('bild');
+        var ctx = canvas.getContext('2d');
+
+        // In dieses Objekt ctx können wir nun zeichnen
+
+        ctx.strokeStyle = '#0000ff';  // Linienfarbe blau
+        ctx.lineWidth = 3;            // Strichdicke 3px
+
+        const drawPacman = function(x, y) {
+            // Pacman:
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(x, y, 100, Math.PI / 6, 11 * Math.PI / 6); // Bogen: 30° = Pi / 6, 1° = Pi / 180
+            ctx.lineTo(x, y);
+            ctx.lineTo(x + 100 * Math.cos(Math.PI / 6), y + 100 * Math.sin(Math.PI / 6));
+            ctx.fillStyle = '#ffe737';
+            ctx.fill();
+            ctx.stroke();
+        };
+
+        let currentX = 0;
+        const movePacman = function() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawPacman(currentX, 200);
+            currentX += 10;
+            setTimeout(movePacman, 50);
+        };
+
+        movePacman();
+    </script>
+    </body>
+</html>

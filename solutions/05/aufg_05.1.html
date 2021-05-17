@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Aufgabe 5.1</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        const openDate = new Date();
+        const refreshOpenCounter = function() {
+            const openMilllis = new Date().getTime() - openDate.getTime();
+            $('#open-counter').html('Diese Seite ist seit ' + Math.round(openMilllis / 1000) + ' Sekunden offen.');
+            setTimeout(refreshOpenCounter, 2000);
+        };
+
+        $(document).ready(function() {
+            refreshOpenCounter();
+        });
+    </script>
+</head>
+<body>
+    <h1 id="open-counter">Diese Seite ist seit 0 Sekunden offen.</h1>
+</body>
+</html>

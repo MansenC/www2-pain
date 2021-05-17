@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Aufgabe 5.3</title>
+</head>
+<body>
+    <canvas id="canvas" width="500" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const canvasMaxWidth = canvas.width - 20;
+        const canvasMaxHeight = canvas.height - 20;
+
+        const initialX = Math.random() * canvasMaxWidth;
+        const initialY = Math.random() * canvasMaxHeight;
+
+        const drawInitialSquare = function() {
+            ctx.fillStyle = '#ff0000';
+            ctx.fillRect(initialX, initialY, 20, 20);
+        };
+
+        const addNewSquare = function() {
+            const x = Math.random() * canvasMaxWidth;
+            const y = Math.random() * canvasMaxHeight;
+            const overlaps = doesOverlap(x, y, initialX, initialY);
+
+            ctx.fillStyle = '#ffff00';
+            if (overlaps) {
+                ctx.fillStyle = '#0000ff';
+            }
+
+            ctx.fillRect(x, y, 20, 20);
+
+            if (overlaps) {
+                return;
+            }
+
+            setTimeout(addNewSquare, 100);
+        };
+
+        const doesOverlap = function(x, y, withX, withY) {
+            return (
+                x + 20 >= withX &&
+                y + 20 >= withY &&
+                x < withX + 20 &&
+                y < withY + 20
+            );
+        };
+
+        drawInitialSquare();
+        addNewSquare();
+    </script>
+</body>
+</html>
