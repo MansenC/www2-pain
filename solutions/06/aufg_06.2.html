@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Aufgabe 6.2</title>
+    <meta charset="utf-8">
+    <style type="text/css">
+        #bild {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1>canvas</h1>
+    <canvas id="bild" width="500" height="400"></canvas>
+    <script type="text/javascript">
+        var pressedKeys = [];
+        document.onkeydown = function(e) {
+            pressedKeys.push(e.which);
+        };
+        document.onkeyup = function(e) {
+            pressedKeys = pressedKeys.filter(function(x) {
+                return x !== e.which;
+            });
+        };
+
+        var canvas = document.getElementById('bild');
+        var ctx = canvas.getContext('2d');
+
+        function pacman(x, y, isOpen) {
+            var r = 50;
+            ctx.fillStyle = '#ffff00';
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 5;
+
+            ctx.beginPath();
+            if (isOpen) {
+                ctx.arc(x, y, r, Math.PI/6, 11*Math.PI / 6);
+                ctx.lineTo(x, y);
+                ctx.lineTo(x + (r + 2.5) * Math.cos(Math.PI/6), y + (r + 2.5) * Math.sin(Math.PI/6));
+            } else {
+                ctx.arc(x, y, r, 0, 2* Math.PI);
+                ctx.lineTo(x, y, x + r, y);
+            }
+            ctx.fill();
+            ctx.stroke();
+        }
+        
+        var x = 0;
+        var y = 200;
+        var isOpen = true;
+
+        // w = 87; d = 68; s = 83; a = 65
+
+        function movePacman() {
+            canvas.width = canvas.width;
+            pacman(x, y, isOpen);
+            // Checken, ob d gedrückt ist
+            if (pressedKeys.indexOf(68) === -1) {
+                if (pressedKeys.indexOf(65) !== -1) {
+                    // a ist gedrückt
+                    x -= 10;
+                }
+            } else {
+                // d ist gedrückt
+                x += 10;
+            }
+
+            if (pressedKeys.indexOf(87) === -1) {
+                if (pressedKeys.indexOf(83) !== -1) {
+                    // s ist gedrückt
+                    y += 10;
+                }
+            } else {
+                // w ist gedrückt
+                y -= 10;
+            }
+
+            isOpen = !isOpen;
+            if (x > 500) {
+                x = 0;
+            } else if (x < 0) {
+                x = 500;
+            }
+
+            if (y > 400) {
+                y = 0;
+            } else if (y < 0) {
+                y = 400;
+            }
+
+            setTimeout(movePacman, 100);
+        }
+
+        movePacman();
+    </script>
+</body>
+</html>

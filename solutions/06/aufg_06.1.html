@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <title>Aufgabe 6.1</title>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
+    <style>    
+        #bild {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Das canvas-Element</h1>
+    <h1>Zeichnen mit dem Canvas-Element</h1>
+    <div>
+        <input type="color" id="colorpicker">
+        <input type="number" id="linethiccness" value="3">
+        <input type="checkbox" id="eraser">
+        <label for="eraser">Erase</label>
+        <button id="clear">Clear</button>
+    </div>
+    <canvas id='bild' width="500" height="400"></canvas>
+    <script>
+        var canvas = document.getElementById('bild');
+        var ctx = canvas.getContext('2d');
+
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 3; // Strichdicke;
+
+        var isMouseDown = false;
+        var isEraser = false;
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function mouseDownHandler(evt) {
+            var off = $('#bild').offset(),
+                x = evt.clientX - off.left,
+                y = evt.clientY - off.top;
+
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            isMouseDown = true;
+        }
+
+        function mouseMoveHandler(evt) {
+            var off = $('#bild').offset(),
+                x = evt.clientX - off.left,
+                y = evt.clientY - off.top;
+
+            if (isMouseDown) {
+                ctx.lineTo(x, y);
+                ctx.stroke();
+            }
+        }
+
+        function mouseUpHandler(evt) {
+            isMouseDown = false;
+        }
+
+        $('#bild').on('mousedown', mouseDownHandler);
+        $('#bild').on('mousemove', mouseMoveHandler);
+        $(document).on('mouseup', mouseUpHandler);
+        $('#clear').click(clearCanvas);
+        $('#linethiccness').change(function() {
+            if (!isEraser) {
+                ctx.lineWidth = $(this).val();
+            }
+        });
+        $('#colorpicker').change(function() {
+            if (!isEraser) {
+                ctx.strokeStyle = $(this).val();
+            }
+        });
+        $('#eraser').change(function() {
+            if (this.checked) {
+                ctx.lineWidth = 15;
+                ctx.strokeStyle = '#ffffff';
+                isEraser = true;
+            } else {
+                ctx.lineWidth = $('#linethiccness').val();
+                ctx.strokeStyle = $('#colorpicker').val();
+                isEraser = false;
+            }
+        });
+    </script>
+</body>
+</html>
