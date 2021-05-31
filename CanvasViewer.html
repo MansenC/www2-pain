@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head><title>bsp22a.html</title>
+        <meta charset="UTF-8">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
+        <style>    
+          #bild {
+            border: 1px solid black;
+          }
+        </style>
+    </head>
+    <body>
+    <h1>Canvas /JSON / WebSockets</h1>
+    <canvas id='bild' width="600" height="600"></canvas>
+    <script>
+    var connection = new WebSocket('ws://51.77.53.86:4444');
+    connection.onopen = function() {
+        console.log("Verbindung zu WebSocket-Server ist aufgebaut");
+    };
+    connection.onerror = function(err) {
+        console.log("WebSocket-Fehler " + err);
+    };
+    
+    var color = '#694200';
+    var pensize = 1;
+       
+    var canvas = document.getElementById('bild');
+    var ctx = canvas.getContext('2d');
+
+
+    ctx.strokeStyle = '#0000ff';
+    ctx.lineWidth = 1; // Strichdicke;
+
+    var isMouseDown = false;
+    var mouseDownHandler = function(evt) {
+        var off = $('#bild').offset(),
+            x = evt.clientX - off.left,
+            y = evt.clientY - off.top;
+
+        isMouseDown = true;
+        
+        sendeMsg('down', x, y);
+    };
+
+    var mouseMoveHandler = function(evt) {
+        if (isMouseDown) {
+            var off = $('#bild').offset(),
+                x = evt.clientX - off.left,
+                y = evt.clientY - off.top;
+
+            sendeMsg('move', x, y);
+        }
+    };
+
+    var mouseUpHandler = function(evt) {
+        isMouseDown = false;
+    };
+
+    $('#bild').on('mousedown', mouseDownHandler);
+    $('#bild').on('mousemove', mouseMoveHandler);
+    $(document).on('mouseup', mouseUpHandler);  // document, da der mouseup-Event 
+                        // auch ausserhalb des canvas geschehen kann.
+                        
+    sendeMsg = function(type, x, y) {
+        var obj = {
+            type: type,
+            x: x,
+            y: Math.round(y),
+            color: color,
+            pensize: pensize
+        };
+        connection.send(JSON.stringify(obj));
+    };
+    
+    connection.onmessage = function(evt) {
+        var obj = JSON.parse(evt.data);
+
+        ctx.strokeStyle = obj.color;
+        ctx.lineWidth = obj.pensize;
+        
+        if (obj.type == 'down') {
+            ctx.beginPath(); // Starte neuen Pfad
+            ctx.moveTo(obj.x, obj.y);
+        } else if (obj.type == 'move') {
+            ctx.lineTo(obj.x, obj.y);
+            ctx.stroke();
+        }               
+    };
+                       
+    </script>
+    </body>
+</html>
