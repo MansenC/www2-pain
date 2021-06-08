@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head><title>Aufgabe 8.2</title>
+<meta charset="utf-8">
+<style type="text/css">
+canvas {
+    border: 1px solid black;
+}
+</style>
+</head>
+<body>
+<h1>Zugriff auf Webcam - veraltet</h1>
+<!-- Im video element wird das Kamerabild ausgegeben -->
+<!-- Das Videoelement muss nicht einmal sichtbar sein -->
+<video id="video" width="320" height="240" autoplay 
+    style="display:inline; /*visibility:hidden;*/ border: 1px solid black; "></video>
+<canvas id="bild" width="320" height="240"></canvas>
+
+<input type="button" value="foto" onclick="schiesseFoto()">
+
+<script type="text/javascript">
+"use strict";
+
+// Erzeuge Browser-unabhängigen Zugriff über getUserMedia
+navigator.getUserMedia = (navigator.getUserMedia ||
+                            navigator.webkitGetUserMedia ||
+                            navigator.mozGetUserMedia ||
+                            navigator.msGetUserMedia);
+                            
+var video_tag = document.getElementById('video');
+var ctx = document.getElementById('bild').getContext('2d');
+
+var schiesseFoto = function() {
+    ctx.drawImage(video, 0, 0, 320, 240);
+};
+
+if (navigator.getUserMedia) {
+    // Aufruf der Funktion getUserMedia:
+    navigator.getUserMedia(
+        {video: true, audio: false},
+        function(stream) {
+            video_tag.srcObject = stream;
+        },
+        function(err) {
+            console.log("CAM error " + err.name);
+        }
+    );
+} else {
+    console.log("No camera available");
+}
+</script>
+</body>
+</html>

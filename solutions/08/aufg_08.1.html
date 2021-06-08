@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <title>Aufgabe 8.1</title>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
+    <style>    
+        #bild {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Das canvas-Element</h1>
+    <h1>Zeichnen mit dem Canvas-Element</h1>
+    <div>
+        <input type="color" id="colorpicker">
+        <input type="number" id="linethiccness" value="3">
+        <input type="checkbox" id="eraser">
+        <label for="eraser">Erase</label>
+        <button id="clear">Clear</button>
+    </div>
+    <canvas id='bild' width="500" height="400"></canvas>
+    <script>
+        const dataKey = 'image-data';
+    
+        let data;
+        let dataString = localStorage.getItem(dataKey);
+        console.log(dataString);
+        if (!dataString) {
+            data = {
+                color: '#000000',
+                lineWidth: 3,
+                isErasing: false,
+            };
+        } else {
+            data = JSON.parse(dataString);
+        }
+        
+        $('#colorpicker').val(data.color);
+        $('#linethiccness').val(data.lineWidth);
+        document.getElementById('eraser').checked = data.isErasing;
+        
+        function saveData() {
+            console.log('Save data...');
+            console.log(data);
+            localStorage.setItem(dataKey, JSON.stringify(data));
+        }
+        
+        var canvas = document.getElementById('bild');
+        var ctx = canvas.getContext('2d');
+
+        if (data.isErasing) {
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 15;
+        } else {
+            ctx.strokeStyle = data.color;
+            ctx.lineWidth = data.lineWidth;
+        }
+
+        var isMouseDown = false;
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function mouseDownHandler(evt) {
+            var off = $('#bild').offset(),
+                x = evt.clientX - off.left,
+                y = evt.clientY - off.top;
+
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            isMouseDown = true;
+        }
+
+        function mouseMoveHandler(evt) {
+            var off = $('#bild').offset(),
+                x = evt.clientX - off.left,
+                y = evt.clientY - off.top;
+
+            if (isMouseDown) {
+                ctx.lineTo(x, y);
+                ctx.stroke();
+            }
+        }
+
+        function mouseUpHandler(evt) {
+            isMouseDown = false;
+        }
+
+        $('#bild').on('mousedown', mouseDownHandler);
+        $('#bild').on('mousemove', mouseMoveHandler);
+        $(document).on('mouseup', mouseUpHandler);
+        $('#clear').click(clearCanvas);
+        $('#linethiccness').change(function() {
+            data.lineWidth = $(this).val();
+            saveData();
+            if (!data.isErasing) {
+                ctx.lineWidth = data.lineWidth;
+            }
+        });
+        $('#colorpicker').change(function() {
+            data.color = $(this).val();
+            saveData();
+            if (!data.isErasing) {
+                ctx.strokeStyle = data.color;
+            }
+        });
+        $('#eraser').change(function() {
+            if (this.checked) {
+                ctx.lineWidth = 15;
+                ctx.strokeStyle = '#ffffff';
+                data.isErasing = true;
+            } else {
+                ctx.lineWidth = data.lineWidth;
+                ctx.strokeStyle = data.color;
+                data.isErasing = false;
+            }
+
+            saveData();
+        });
+    </script>
+</body>
+</html>
